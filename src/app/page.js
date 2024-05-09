@@ -30,12 +30,6 @@ export default function Home() {
   //   console.log(values)
   // }
 
-  const [file, setFile] = useState(null);
-
-  const onFileChange = (event) => {
-      setFile(event.target.files[0]);
-  };
-
   useEffect(() => {
     fetch("http://localhost:8080/api/home")
       .then((response) => response.json())
@@ -49,12 +43,34 @@ export default function Home() {
       });
   }, []);
 
-  const onFileUpload = () => {
-    console.log('hello')
+  const [file, setFile] = useState(null);
+
+  const onFileChange = (event) => {
+    const selectedFile =  event.target.files[0]
+    setFile(selectedFile);
+  };
+
+  
+
+  async function onFileUpload() {
+    // console.log('hello')
     const formData = new FormData();
     formData.append("file", file);
 
-    fetch('http://localhost:5000/upload', {
+    // const process_request = await fetch('http://localhost:8080/api/upload',{
+    //     method: 'POST', 
+    //     body: formData,
+    //   });
+
+
+    
+    // if (process_request.ok) {
+    //   const process_request_json_data = await process_request.json(); // Parse JSON response
+    //   let process_url = process_request_json_data["message"]
+    //   console.log (process_url);
+    // }
+
+    fetch('http://localhost:8080/api/upload', {
         method: 'POST',
         body: formData,
     })
@@ -67,17 +83,7 @@ export default function Home() {
     });
 };
 
-// useEffect(() => {
-//   fetch("http://localhost:8080/api/home")
-//     .then((response) => response.json())
-//     .then((data) => {
-//       // message = 'Loading'
-//       // once data is retrieved
-//       // message = data.message
-//       setMessage(data.message);
-//       setPeople(data.people);
-//     });
-// }, []);
+
 
   return (
     <body>
@@ -104,7 +110,7 @@ export default function Home() {
           <Label htmlFor="picture" className="text-white">Upload a picture</Label>
 
           <div className="flex w-full max-w-sm items-center space-x-2">
-           <Input id="picture" type="file" />
+           <Input id="picture" type="file" onChange={onFileChange} />
           <Button type="submit" className="bg-white text-black" onClick={onFileUpload}>Upload</Button>
           </div>
           
