@@ -3,6 +3,11 @@ from flask_cors import CORS
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 import os
+
+from PIL import Image
+import io
+
+
 # app instance
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {"origins": "*"}})
@@ -17,6 +22,9 @@ def return_home():
         'people': ['Jack', 'Harry', 'Arpan']
     })
 
+
+
+
 @app.route("/api/upload", methods=['POST'])
 def upload_image():
     if 'file' not in request.files:
@@ -26,16 +34,24 @@ def upload_image():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    filename = secure_filename(file.filename)
-    file.save(os.path.join('/Users/mihirseth/Desktop', filename))
+    # Read the file into memory
+    image = Image.open(io.BytesIO(file.read()))
 
-    # results = model(os.path.join('/Users/mihirseth/Desktop', filename))
+    # Process the image with your model
+    results = model(image)
+    results = results[0]
+    box = results.boxes[0]
+    class_id = results.names[box.cls[0].item()]
+    detected_items = str(class_id)
+    # index = results.find("preprocess")
+    # # If "preprocess" is found in the results string
+    # if index != -1:
+    #     # Cut out everything after "preprocess"
+    #     results = results[:index + len("preprocess")]
 
-    # Extract detected objects and their counts
-    # detected_objects = [(pred[5], pred[4]) for pred in results.pred[0]]
-    
+    # results = results.split('\n')
 
-    return jsonify({'detected_objects': 'gello'})
+    return jsonify({'message': 'File processed successfully', 'objects': detected_items})
 
 # @app.route("/api/upload", methods=['POST', "GET"])
 # def upload_image():

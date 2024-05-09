@@ -10,40 +10,36 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
- 
-// const formSchema = z.object({
-//   username: z.string().min(2).max(50),
-// })
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 export default function Home() {
 
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     username: "",
-  //   },
-  // })
-  
-  // function onSubmit(values: z.infer<typeof formSchema>) {
-  //   // Do something with the form values.
-  //   // ✅ This will be type-safe and validated.
-  //   console.log(values)
-  // }
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/home")
-      .then((response) => response.json())
-      .then((data) => {
-        // message = 'Loading'
-        // once data is retrieved
-        // message = data.message
-        // setMessage(data.message);
-        // setPeople(data.people);
-        console.log(data)
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:8080/api/home")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // message = 'Loading'
+  //       // once data is retrieved
+  //       // message = data.message
+  //       // setMessage(data.message);
+  //       // setPeople(data.people);
+  //       console.log(data)
+  //     });
+  // }, []);
 
   const [file, setFile] = useState(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const onFileChange = (event) => {
     const selectedFile =  event.target.files[0]
@@ -52,23 +48,18 @@ export default function Home() {
 
   
 
-  async function onFileUpload() {
+   const onFileUpload = () => {
     // console.log('hello')
+
+    if (file === null) {
+      console.log('Please upload a file')
+      setIsAlertOpen(true);
+      console.log(isAlertOpen)
+
+
+    } else {
     const formData = new FormData();
     formData.append("file", file);
-
-    // const process_request = await fetch('http://localhost:8080/api/upload',{
-    //     method: 'POST', 
-    //     body: formData,
-    //   });
-
-
-    
-    // if (process_request.ok) {
-    //   const process_request_json_data = await process_request.json(); // Parse JSON response
-    //   let process_url = process_request_json_data["message"]
-    //   console.log (process_url);
-    // }
 
     fetch('http://localhost:8080/api/upload', {
         method: 'POST',
@@ -81,9 +72,14 @@ export default function Home() {
     .catch(error => {
         console.error('Error uploading image:', error);
     });
+  }
 };
 
 
+  const closeAlert = () => {
+    setIsAlertOpen(false);
+
+  };
 
   return (
     <body>
@@ -116,6 +112,24 @@ export default function Home() {
           
 
     </div>
+
+    {isAlertOpen && (
+        <AlertDialog open={isAlertOpen}>
+          {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>No file uploaded</AlertDialogTitle>
+              <AlertDialogDescription>
+                Please upload a file before continuing.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={closeAlert}>Continue</AlertDialogCancel>
+              {/* <AlertDialogAction>Continue</AlertDialogAction> */}
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </body>
   );
 }
