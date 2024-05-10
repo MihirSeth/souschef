@@ -40,13 +40,15 @@ export default function Home() {
 
   const [file, setFile] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [ingredients, setIngredients] = useState("");
+  const [isData, setisData] = useState(false);
+
+
 
   const onFileChange = (event) => {
     const selectedFile =  event.target.files[0]
     setFile(selectedFile);
   };
-
-  
 
    const onFileUpload = () => {
     // console.log('hello')
@@ -68,14 +70,15 @@ export default function Home() {
     .then(response => response.json())
     .then(data => {
         console.log('Image uploaded successfully:', data);
+        setisData(true)
+        setIngredients(data.objects)
+        console.log(data.objects)
     })
     .catch(error => {
         console.error('Error uploading image:', error);
     });
   }
 };
-
-
   const closeAlert = () => {
     setIsAlertOpen(false);
 
@@ -84,7 +87,7 @@ export default function Home() {
   return (
     <body>
     <div className="min-h-screen bg-gradient-to-r from-neutral-900 to-emerald-800">
-      <header className="flex flex-col justify-center pl-10 pt-5 "> 
+      <header className="flex flex-col items-center pt-5 "> 
         {/* <h1 className="font-semibold text-4xl ">Hello</h1> */}
             <Image
           src={logo}
@@ -94,24 +97,24 @@ export default function Home() {
           // blurDataURL="data:..." automatically provided
           // placeholder="blur" // Optional blur-up while loading
         />
-        <h1 className="font-semibold text-white text-2xl" >Ready to get started?</h1>
+        {/* <h1 className="font-semibold text-white text-2xl" >Upload a picture to start?</h1> */}
 
 
       </header>
+          <div className="flex flex-col items-center h-screen space-y-2 w-full">
+            <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start?</Label>
 
-      {/* <div>
-            <input type="file" onChange={onFileChange} />
-            <button onClick={onFileUpload}>Upload!</button>
-        </div> */}
-          <Label htmlFor="picture" className="text-white">Upload a picture</Label>
+            <div className="flex flex-col w-full items-center max-w-sm space-y-2">
+              <Input id="picture" type="file" onChange={onFileChange} />
+              <Button type="submit" className="bg-white text-black" onClick={onFileUpload}>Upload</Button>
+            </div>
 
-          <div className="flex w-full max-w-sm items-center space-x-2">
-           <Input id="picture" type="file" onChange={onFileChange} />
-          <Button type="submit" className="bg-white text-black" onClick={onFileUpload}>Upload</Button>
+            {isData && (
+                 <h1 className="text-white">{ingredients}</h1>
+              )}  
           </div>
-          
+          </div>
 
-    </div>
 
     {isAlertOpen && (
         <AlertDialog open={isAlertOpen}>
@@ -130,6 +133,8 @@ export default function Home() {
           </AlertDialogContent>
         </AlertDialog>
       )}
+
+     
     </body>
   );
 }
