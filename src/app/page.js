@@ -40,7 +40,7 @@ export default function Home() {
 
   const [file, setFile] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [ingredients, setIngredients] = useState("");
+  const [ingredients, setIngredients] = useState([]);
   const [isData, setisData] = useState(false);
 
 
@@ -102,16 +102,17 @@ export default function Home() {
 
       </header>
           <div className="flex flex-col items-center h-screen space-y-2 w-full">
-            <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start?</Label>
+            <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start!</Label>
 
             <div className="flex flex-col w-full items-center max-w-sm space-y-2">
               <Input id="picture" type="file" onChange={onFileChange} />
-              <Button type="submit" className="bg-white text-black" onClick={onFileUpload}>Upload</Button>
+              <Button type="submit" className="bg-white text-black hover:bg-black hover:text-white" onClick={onFileUpload}>Upload</Button>
             </div>
 
-            {isData && (
-                 <h1 className="text-white">{ingredients}</h1>
-              )}  
+            {isData && ingredients.map((ingredient) => (
+              <h1 className="text-white">{ingredient}</h1>
+            ))}
+
           </div>
           </div>
 

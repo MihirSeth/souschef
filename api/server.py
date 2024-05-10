@@ -41,8 +41,13 @@ def upload_image():
     results = model(image)
     results = results[0]
     box = results.boxes[0]
-    class_id = results.names[box.cls[0].item()]
-    detected_items = str(class_id)
+    detected_items_list = []
+    for box in results.boxes:
+            class_id = results.names[box.cls[0].item()]
+            detected_items = str(class_id)
+            detected_items_list.append(detected_items)
+
+    print(detected_items_list)
     # index = results.find("preprocess")
     # # If "preprocess" is found in the results string
     # if index != -1:
@@ -51,7 +56,7 @@ def upload_image():
 
     # results = results.split('\n')
 
-    return jsonify({'message': 'File processed successfully', 'objects': detected_items})
+    return jsonify({'message': 'File processed successfully', 'objects': detected_items_list})
 
 # @app.route("/api/upload", methods=['POST', "GET"])
 # def upload_image():
