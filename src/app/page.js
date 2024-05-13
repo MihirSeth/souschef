@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 // import axios from "axios";
 import { Button } from "@/components/ui/button"
 
+import { useRouter } from 'next/navigation'
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,22 +22,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { usePathname, useSearchParams } from 'next/navigation'
 
 
 export default function Home() {
 
-  // useEffect(() => {
-  //   fetch("http://localhost:8080/api/home")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       // message = 'Loading'
-  //       // once data is retrieved
-  //       // message = data.message
-  //       // setMessage(data.message);
-  //       // setPeople(data.people);
-  //       console.log(data)
-  //     });
-  // }, []);
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const [file, setFile] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -72,6 +65,15 @@ export default function Home() {
         console.log('Image uploaded successfully:', data);
         setisData(true)
         setIngredients(data.objects)
+      
+
+        // router.push(`/ingredients?ingredients=${data.objects.join(',')}`);
+
+        // router.push(
+        //   '/ingredients'
+        // )
+        // setisData(true)
+        // setIngredients(data.objects)
         console.log(data.objects)
     })
     .catch(error => {
@@ -85,22 +87,22 @@ export default function Home() {
   };
 
   return (
-    <body>
-    <div className="min-h-screen bg-gradient-to-r from-neutral-900 to-emerald-800">
-      <header className="flex flex-col items-center pt-5 "> 
-        {/* <h1 className="font-semibold text-4xl ">Hello</h1> */}
-            <Image
-          src={logo}
-          alt="Picture of the author"
-          width={200} 
-          height={200} 
-          // blurDataURL="data:..." automatically provided
-          // placeholder="blur" // Optional blur-up while loading
-        />
-        {/* <h1 className="font-semibold text-white text-2xl" >Upload a picture to start?</h1> */}
+    // <body>
+    // <div className="min-h-screen bg-gradient-to-r from-neutral-900 to-emerald-800">
+    //   <header className="flex flex-col items-center pt-5 "> 
+    //     {/* <h1 className="font-semibold text-4xl ">Hello</h1> */}
+    //         <Image
+    //       src={logo}
+    //       alt="Picture of the author"
+    //       width={200} 
+    //       height={200} 
+    //       // blurDataURL="data:..." automatically provided
+    //       // placeholder="blur" // Optional blur-up while loading
+    //     />
+    //     {/* <h1 className="font-semibold text-white text-2xl" >Upload a picture to start?</h1> */}
 
 
-      </header>
+    //   </header>
           <div className="flex flex-col items-center h-screen space-y-2 w-full">
             <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start!</Label>
 
@@ -109,33 +111,48 @@ export default function Home() {
               <Button type="submit" className="bg-white text-black hover:bg-black hover:text-white" onClick={onFileUpload}>Upload</Button>
             </div>
 
-            {isData && ingredients.map((ingredient) => (
-              <h1 className="text-white">{ingredient}</h1>
-            ))}
+            {isData && (
+              <div className="flex flex-row flex-wrap justify-center space-x-2 pt-5">
+                {ingredients.map((ingredient) => (
+                  <IngredientCard ingredient={ingredient} />
+                ))}
+              </div>
+            )}
 
+            {isAlertOpen && (
+                    <AlertDialog open={isAlertOpen}>
+                      {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>No file uploaded</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Please upload a file before continuing.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={closeAlert}>Continue</AlertDialogCancel>
+                          {/* <AlertDialogAction>Continue</AlertDialogAction> */}
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
           </div>
-          </div>
+          // </div>
 
 
-    {isAlertOpen && (
-        <AlertDialog open={isAlertOpen}>
-          {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>No file uploaded</AlertDialogTitle>
-              <AlertDialogDescription>
-                Please upload a file before continuing.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={closeAlert}>Continue</AlertDialogCancel>
-              {/* <AlertDialogAction>Continue</AlertDialogAction> */}
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+   
 
      
-    </body>
+    // </body>
+  );
+}
+
+
+
+export function IngredientCard({ ingredient }) {
+  return (
+    <div className="bg-black shadow-2xl rounded px-8 pt-6 pb-8 mb-4">
+      <div className="font-bold text-white text-xl">{ingredient}</div>
+    </div>
   );
 }

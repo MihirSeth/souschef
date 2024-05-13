@@ -1,5 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
+import logo from '/Users/mihirseth/Desktop/Coding/souschef/sous-chef/public/vertical-logo.png'
 // import { cn } from "@/lib/utils"
 
 
@@ -13,7 +15,27 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gradient-to-r from-neutral-900 to-emerald-800">
+          <header className="flex flex-col items-center pt-5 "> 
+        {/* <h1 className="font-semibold text-4xl ">Hello</h1> */}
+            <Image
+          src={logo}
+          alt="Picture of the author"
+          width={200} 
+          height={200} 
+          // blurDataURL="data:..." automatically provided
+          // placeholder="blur" // Optional blur-up while loading
+        />
+
+
+          </header>
+          {children}
+
+        </div>
+        
+        
+        </body>
     </html>
   );
 }

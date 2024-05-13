@@ -47,6 +47,9 @@ def upload_image():
             detected_items = str(class_id)
             detected_items_list.append(detected_items)
 
+    detected_items_list = list(set(detected_items_list))
+
+
     print(detected_items_list)
     # index = results.find("preprocess")
     # # If "preprocess" is found in the results string
