@@ -2,7 +2,10 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
-import os
+import pandas as pd
+import ast
+
+
 
 from PIL import Image
 import io
@@ -13,6 +16,14 @@ app = Flask(__name__)
 CORS(app, resources={r'/api/*': {"origins": "*"}})
 app.debug = True
 model = YOLO("/Users/mihirseth/Desktop/Coding/souschef/sous-chef/api/model.pt")
+
+pd.set_option('display.max_colwidth', 1000)
+
+# Specify the column names that you want to read
+columns = ['ingredients', 'name', 'steps','n_ingredients','n_steps', 'nutrition']
+
+df = pd.read_csv('/Users/mihirseth/Desktop/Coding/souschef/sous-chef/api/RAW_recipes.csv', usecols=columns)
+
 
 # /api/home
 @app.route("/api/home", methods=['GET'])
@@ -31,11 +42,20 @@ def upload_image():
         return jsonify({'error': 'No file part in the request'}), 400
 
     file = request.files['file']
+    data = request.form
+    # print(data['calorie'])
+    calories = int(data['calorie'])
+    cooking_steps = data['cooking_steps']
+    protein = int(data['protein'])
+    ingredients_num = data['ingredients_num']
+
+
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
     # Read the file into memory
     image = Image.open(io.BytesIO(file.read()))
+    
 
     # Process the image with your model
     results = model(image)
@@ -48,34 +68,24 @@ def upload_image():
             detected_items_list.append(detected_items)
 
     detected_items_list = list(set(detected_items_list))
+    detected_items_list = map(str.lower, detected_items_list)
 
 
-    print(detected_items_list)
-    # index = results.find("preprocess")
-    # # If "preprocess" is found in the results string
-    # if index != -1:
-    #     # Cut out everything after "preprocess"
-    #     results = results[:index + len("preprocess")]
 
-    # results = results.split('\n')
+    df['nutrition'] = df['nutrition'].apply(ast.literal_eval)
 
-    return jsonify({'message': 'File processed successfully', 'objects': detected_items_list})
+    ingredients_condition = df['ingredients'].apply(lambda x: all(item in x for item in detected_items_list))
+    cooking_steps_condition = df['n_steps'] > 10
+    ingredients_num_condition = df['n_ingredients'] > 10
+    calories_condition = df['nutrition'].apply(lambda x: x[0] <= calories)
+    protein_condition = df['nutrition'].apply(lambda x: x[5] >= protein)
 
-# @app.route("/api/upload", methods=['POST', "GET"])
-# def upload_image():
+    combined_condition = ingredients_condition & cooking_steps_condition & ingredients_num_condition & calories_condition & protein_condition
 
-#     #  return jsonify({
-#     #     'message': "Like this video if this helped!",
-#     #     'people': ['Jack', 'Harry', 'Arpan']
-#     # })
+    df_filtered = df[combined_condition]
 
-#     file = request. files['file']
-#     file_name = file.filename
-#     print ('check')
-#     return jsonify({
-#         'message': "Like this video if this helped!",
-#         'people': ['Jack', 'Harry', 'Arpan']
-#     })
+    return jsonify({'message': 'File processed successfully', 'objects': detected_items_list, 'recipes': len(df_filtered)}) 
+
 
 
 
