@@ -22,8 +22,6 @@ pd.set_option('display.max_colwidth', 1000)
 # Specify the column names that you want to read
 columns = ['ingredients', 'name', 'steps','n_ingredients','n_steps', 'nutrition']
 
-df = pd.read_csv('/Users/mihirseth/Desktop/Coding/souschef/sous-chef/api/RAW_recipes.csv', usecols=columns)
-
 
 # /api/home
 @app.route("/api/home", methods=['GET'])
@@ -49,6 +47,9 @@ def upload_image():
     protein = int(data['protein'])
     ingredients_num = data['ingredients_num']
 
+    df = pd.read_csv('/Users/mihirseth/Downloads/archive-2/RAW_recipes.csv', usecols=columns)
+
+
 
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
@@ -68,7 +69,7 @@ def upload_image():
             detected_items_list.append(detected_items)
 
     detected_items_list = list(set(detected_items_list))
-    detected_items_list = map(str.lower, detected_items_list)
+    detected_items_list = list(map(str.lower, detected_items_list))
 
 
 
