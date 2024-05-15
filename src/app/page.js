@@ -47,6 +47,10 @@ const FormSchema = z.object({
   protein: z.string().min(1, {
       message: "Protein must be greater than 0.",
   }),
+
+  minutes: z.string().min(1, {
+    message: "Cooking Time must be greater than 0.",
+}),
 })
 
 export default function Home() {
@@ -118,9 +122,9 @@ export default function Home() {
 
             {isData && (
               <div className="flex flex-row flex-wrap justify-center space-x-2 pt-5">
-                {ingredients.map((ingredient) => (
-                  <IngredientCard ingredient={ingredient} />
-                ))}
+`                {ingredients.map((ingredient) => (
+                  <IngredientCard key={ingredient} ingredient={ingredient} />
+                ))}`
               </div>
             )}
 
@@ -143,7 +147,7 @@ export default function Home() {
                   )}
 
             <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onFileUpload)} className="w-min space-y-6 ">
+                  <form onSubmit={form.handleSubmit(onFileUpload)} className="w-fit pt-2 space-y-4 ">
                     <div className="p-4 bg-zinc-900 shadow rounded-lg">
                       {/* <h3 className="mb-4 text-lg font-medium">Email Notifications</h3> */}
                       <div className="space-y-4">
@@ -218,7 +222,26 @@ export default function Home() {
                             <Input type="number" placeholder="protein" {...field} />
                           </FormControl>
                           <FormDescription className="text-slate-300">
-                            What is the minimum gms of protein you want in the food?
+                            What is the minimum grams of protein you want in the food?
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+
+
+                     <FormField
+                      control={form.control}
+                      name="minutes"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white ">Maximum Cooking Time</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="minutes" {...field} />
+                          </FormControl>
+                          <FormDescription className="text-slate-300">
+                            What is the maximum cooking time you want the recipe to take?
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -226,8 +249,9 @@ export default function Home() {
                     />
                       </div>
                     </div>
-                    <Button type="submit" onSubmit={onFileUpload}className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</Button>
-                    
+                    <div className="flex flex-col items-center">
+                      <Button type="submit" onSubmit={onFileUpload} className="mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">Submit</Button>
+                    </div>
                   </form>
                 </Form>
 

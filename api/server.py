@@ -20,7 +20,7 @@ model = YOLO("/Users/mihirseth/Desktop/Coding/souschef/sous-chef/api/model.pt")
 pd.set_option('display.max_colwidth', 1000)
 
 # Specify the column names that you want to read
-columns = ['ingredients', 'name', 'steps','n_ingredients','n_steps', 'nutrition']
+columns = ['ingredients', 'name', 'steps','n_ingredients','n_steps', 'nutrition', 'minutes']
 
 
 # /api/home
@@ -45,6 +45,8 @@ def upload_image():
     calories = int(data['calorie'])
     cooking_steps = data['cooking_steps']
     protein = int(data['protein'])
+    time = int(data['minutes'])
+
     ingredients_num = data['ingredients_num']
 
     df = pd.read_csv('/Users/mihirseth/Downloads/archive-2/RAW_recipes.csv', usecols=columns)
@@ -80,13 +82,21 @@ def upload_image():
     ingredients_num_condition = df['n_ingredients'] > 10
     calories_condition = df['nutrition'].apply(lambda x: x[0] <= calories)
     protein_condition = df['nutrition'].apply(lambda x: x[5] >= protein)
+    minutes_condition = df['minutes'] <= time
 
-    combined_condition = ingredients_condition & cooking_steps_condition & ingredients_num_condition & calories_condition & protein_condition
+    combined_condition = ingredients_condition & cooking_steps_condition & ingredients_num_condition & calories_condition & protein_condition & minutes_condition
 
     df_filtered = df[combined_condition]
 
-    return jsonify({'message': 'File processed successfully', 'objects': detected_items_list, 'recipes': len(df_filtered)}) 
 
+    n = 5
+    # if len(df_filtered) < n:
+    #     n = len(df_filtered)
+
+    # Select n random recipes
+    df_random = df_filtered.sample(n)
+
+    return jsonify({'message': 'File processed successfully', 'objects': detected_items_list, 'recipes': df_random.to_dict(orient='records')})
 
 
 
