@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from 'next/navigation';
 
 import {
   AlertDialog,
@@ -54,7 +55,7 @@ const FormSchema = z.object({
 })
 
 export default function Home() {
-
+  const router = useRouter();
   const [file, setFile] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
@@ -99,6 +100,8 @@ export default function Home() {
           setisData(true)
           setIngredients(data.objects)
           console.log(data.objects)
+          localStorage.setItem("data", JSON.stringify(data));    
+          router.push('/ingredients');      
       })
       .catch(error => {
           console.error('Error uploading image:', error);
@@ -151,49 +154,6 @@ export default function Home() {
                     <div className="p-4 bg-zinc-900 shadow rounded-lg">
                       {/* <h3 className="mb-4 text-lg font-medium">Email Notifications</h3> */}
                       <div className="space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="cooking_steps"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div>
-                                {/* <FormLabel className="text-base">
-                                  Marketing emails
-                                </FormLabel> */}
-                                <FormDescription className="text-white font-2xl">
-                                  Steps to cook should be greater than 10?
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch 
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="ingredients_num"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div className="">
-                                {/* <FormLabel className="text-base">Security emails</FormLabel> */}
-                                <FormDescription className="text-white font-2xl">
-                                    Ingredients to cook should be greater than 10?
-                                </FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch 
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
 
                     <FormField
                       control={form.control}
@@ -276,3 +236,48 @@ export function IngredientCard({ ingredient }) {
     </div>
   );
 }
+
+
+// <FormField
+//                           control={form.control}
+//                           name="cooking_steps"
+//                           render={({ field }) => (
+//                             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+//                               <div>
+//                                 {/* <FormLabel className="text-base">
+//                                   Marketing emails
+//                                 </FormLabel> */}
+//                                 <FormDescription className="text-white font-2xl">
+//                                   Steps to cook should be greater than 10?
+//                                 </FormDescription>
+//                               </div>
+//                               <FormControl>
+//                                 <Switch 
+//                                   checked={field.value}
+//                                   onCheckedChange={field.onChange}
+//                                 />
+//                               </FormControl>
+//                             </FormItem>
+//                           )}
+//                         />
+//                         <FormField
+//                           control={form.control}
+//                           name="ingredients_num"
+//                           render={({ field }) => (
+//                             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+//                               <div className="">
+//                                 {/* <FormLabel className="text-base">Security emails</FormLabel> */}
+//                                 <FormDescription className="text-white font-2xl">
+//                                     Ingredients to cook should be greater than 10?
+//                                 </FormDescription>
+//                               </div>
+//                               <FormControl>
+//                                 <Switch 
+//                                   checked={field.value}
+//                                   onCheckedChange={field.onChange}
+
+//                                 />
+//                               </FormControl>
+//                             </FormItem>
+//                           )}
+//                         />

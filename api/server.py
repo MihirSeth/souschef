@@ -43,11 +43,11 @@ def upload_image():
     data = request.form
     # print(data['calorie'])
     calories = int(data['calorie'])
-    cooking_steps = data['cooking_steps']
+    # cooking_steps = data['cooking_steps']
     protein = int(data['protein'])
     time = int(data['minutes'])
 
-    ingredients_num = data['ingredients_num']
+    # ingredients_num = data['ingredients_num']
 
     df = pd.read_csv('/Users/mihirseth/Downloads/archive-2/RAW_recipes.csv', usecols=columns)
 
@@ -78,8 +78,12 @@ def upload_image():
     df['nutrition'] = df['nutrition'].apply(ast.literal_eval)
 
     ingredients_condition = df['ingredients'].apply(lambda x: all(item in x for item in detected_items_list))
-    cooking_steps_condition = df['n_steps'] > 10
-    ingredients_num_condition = df['n_ingredients'] > 10
+    # cooking_steps_condition = df['n_steps'] > 10
+    # ingredients_num_condition = df['n_ingredients'] > 10
+
+    cooking_steps_condition = df['n_steps'] 
+    ingredients_num_condition = df['n_ingredients'] 
+
     calories_condition = df['nutrition'].apply(lambda x: x[0] <= calories)
     protein_condition = df['nutrition'].apply(lambda x: x[5] >= protein)
     minutes_condition = df['minutes'] <= time
