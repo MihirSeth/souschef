@@ -5,8 +5,6 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import ast
 
-
-
 from PIL import Image
 import io
 

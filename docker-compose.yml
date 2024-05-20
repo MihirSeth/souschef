@@ -1,0 +1,19 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: /Users/mihirseth/Desktop/Coding/souschef/sous-chef
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - /Users/mihirseth/Desktop/Coding/souschef/sous-chef
+      - /app/node_modules
+  backend:
+    build:
+      context: /Users/mihirseth/Desktop/Coding/souschef/sous-chef/api
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - /Users/mihirseth/Desktop/Coding/souschef/sous-chef/api

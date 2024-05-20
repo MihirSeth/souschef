@@ -39,8 +39,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import Loading from "./loading";
-
+import { Icons } from "@/components/ui/loader";
 
 const FormSchema = z.object({
   cooking_steps: z.boolean().default(false).optional(),
@@ -129,9 +128,10 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center h-full space-y-2 w-full">
+      <div className="flex flex-col items-center justify-center h-full space-y-2 w-full">
             <div className="w-1/2">
-                <Progress value={33} />
+
+                <Icons.spinner className="h-24 w-24 animate-spin text-white" />
             </div>
       </div>
     );
@@ -139,7 +139,7 @@ export default function Home() {
 
   return (
 
-          <div className="flex flex-col items-center h-full space-y-2 w-full">
+          <div className="flex flex-col items-center h-full space-y-3 w-full">
 
             <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start!</Label>
 
@@ -261,6 +261,8 @@ export function IngredientCard({ ingredient }) {
     </div>
   );
 }
+
+
 
 
 // <FormField

@@ -1,0 +1,7 @@
+Flask
+flask-cors
+ultralytics===8.2.18
+Werkzeug
+pandas
+# ast
+Pillow
