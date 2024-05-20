@@ -22,6 +22,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import { Progress } from "@/components/ui/progress"
+
 import { Switch } from "@/components/ui/switch"
 import { toast } from "@/components/ui/use-toast"
 import {
@@ -37,6 +39,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import Loading from "./loading";
 
 
 const FormSchema = z.object({
@@ -60,6 +63,8 @@ export default function Home() {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [isData, setisData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Add this line
+
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -82,6 +87,10 @@ export default function Home() {
       setIsAlertOpen(true);
       console.log(isAlertOpen)
     } else {
+
+
+      setIsLoading(true); // Set loading to false when fetch is complete
+
       const formData = new FormData();
       formData.append("file", file);
   
@@ -89,6 +98,8 @@ export default function Home() {
       for (const key in data) {
         formData.append(key, data[key]);
       }
+
+
   
       fetch('http://localhost:8080/api/upload', {
           method: 'POST',
@@ -106,6 +117,9 @@ export default function Home() {
       .catch(error => {
           console.error('Error uploading image:', error);
       });
+      // .finally(() => {
+      //   setIsLoading(false); // Set loading to false when fetch is complete
+      // });
     }
   };
   const closeAlert = () => {
@@ -113,9 +127,24 @@ export default function Home() {
 
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center h-full space-y-2 w-full">
+            <div className="w-1/2">
+                <Progress value={33} />
+            </div>
+      </div>
+    );
+  }
+
   return (
 
           <div className="flex flex-col items-center h-full space-y-2 w-full">
+
+<div className="w-1/2">
+                <Progress value={33} />
+            </div>
+
             <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start!</Label>
 
             <div className="flex flex-col w-full items-center max-w-sm space-y-2">
