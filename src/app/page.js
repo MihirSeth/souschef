@@ -141,10 +141,6 @@ export default function Home() {
 
           <div className="flex flex-col items-center h-full space-y-2 w-full">
 
-<div className="w-1/2">
-                <Progress value={33} />
-            </div>
-
             <Label htmlFor="picture" className="font-semibold text-white text-2xl">Upload a picture to start!</Label>
 
             <div className="flex flex-col w-full items-center max-w-sm space-y-2">
