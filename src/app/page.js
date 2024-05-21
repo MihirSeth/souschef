@@ -99,13 +99,20 @@ export default function Home() {
       }
 
 
-  
       fetch('http://localhost:8080/api/upload', {
           method: 'POST',
           body: formData,
       })
-      .then(response => response.json())
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+      })
       .then(data => {
+          if (!data) {
+              throw new Error('No data returned by API');
+          }
           console.log('Image uploaded successfully:', data);
           setisData(true)
           setIngredients(data.objects)
@@ -129,10 +136,10 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full space-y-2 w-full">
-            <div className="w-1/2">
+            {/* <div className="w-1/2"> */}
 
                 <Icons.spinner className="h-24 w-24 animate-spin text-white" />
-            </div>
+            {/* </div> */}
       </div>
     );
   }
@@ -242,13 +249,6 @@ export default function Home() {
 
                 
           </div>
-          // </div>
-
-            
-   
-
-     
-    // </body>
   );
 }
 
