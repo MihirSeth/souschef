@@ -1,7 +1,7 @@
 "use client"; // This is a client component 
 
-import Image from "next/image";
-import logo from '/Users/mihirseth/Desktop/Coding/souschef/sous-chef/public/vertical-logo.png'
+// import Image from "next/image";
+// import logo from '/Users/mihirseth/Desktop/Coding/souschef/sous-chef/public/vertical-logo.png'
 import { useState, useEffect } from "react";
 // import axios from "axios";
 import { Button } from "@/components/ui/button"
@@ -22,10 +22,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { Progress } from "@/components/ui/progress"
+// import { Progress } from "@/components/ui/progress"
 
-import { Switch } from "@/components/ui/switch"
-import { toast } from "@/components/ui/use-toast"
+// import { Switch } from "@/components/ui/switch"
+// import { toast } from "@/components/ui/use-toast"
 import {
   Form,
   FormControl,

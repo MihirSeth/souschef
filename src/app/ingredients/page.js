@@ -9,11 +9,16 @@ import Link from 'next/link';
 export default function Page() {
 
   const [recipes, setRecipes] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+
 
     useEffect(() => {
         const storedData = localStorage.getItem("data");
         if (storedData) {
           const parsedData = JSON.parse(storedData);
+          console.log(parsedData.objects)
+          setIngredients(parsedData.objects)
+
           setRecipes(parsedData.recipes);
       
         }
@@ -21,7 +26,16 @@ export default function Page() {
 
   return (
     <div className="p-4">
+            <h1 className="text-xl font-bold text-white">Ingredients</h1>
+
+              <div className="flex flex-row flex-wrap justify-center space-x-2 pt-5">
+`                {ingredients.map((ingredient) => (
+                  <IngredientCard key={ingredient} ingredient={ingredient} />
+                ))}`
+              </div>
       <h1 className="text-2xl font-bold mb-4 text-white">Recipes</h1>
+
+      
       {recipes.map((recipe, index) => {
 
           let objects = recipe.objects
