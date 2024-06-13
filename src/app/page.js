@@ -105,12 +105,14 @@ export default function Home() {
       })
       .then(response => {
           if (!response.ok) {
+              alert(`HTTP error! status: ${response.status}`)
               throw new Error(`HTTP error! status: ${response.status}`);
           }
           return response.json();
       })
       .then(data => {
           if (!data) {
+              alert('No data returned by API')
               throw new Error('No data returned by API');
           }
           console.log('Image uploaded successfully:', data);
@@ -121,7 +123,7 @@ export default function Home() {
           router.push('/ingredients');      
       })
       .catch(error => {
-          console.error('Error uploading image:', error);
+          alert('Error uploading image:', error);
       });
       // .finally(() => {
       //   setIsLoading(false); // Set loading to false when fetch is complete

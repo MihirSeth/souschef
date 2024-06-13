@@ -1,6 +1,6 @@
-# sous-chef
+# sous chef
 
-sous-chef is an innovative app that helps you discover new recipes based on the ingredients you have at hand. Simply take a photo of your ingredients, and our app will suggest a variety of recipes you can make with them.
+sous chef is an innovative app that helps you discover new recipes based on the ingredients you have at hand. Simply take a photo of your ingredients, and our app will suggest a variety of recipes you can make with them.
 
 ## Features
 

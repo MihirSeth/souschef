@@ -92,15 +92,13 @@ def upload_image():
 
 
     n = 5
-    # if len(df_filtered) < n:
-    #     n = len(df_filtered)
+    if len(df_filtered) < n:
+        n = len(df_filtered)
 
     # Select n random recipes
     df_random = df_filtered.sample(n)
 
     return jsonify({'message': 'File processed successfully', 'objects': detected_items_list, 'recipes': df_random.to_dict(orient='records')})
-
-
 
 
 if __name__ == "__main__":
