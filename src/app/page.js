@@ -80,6 +80,8 @@ export default function Home() {
 
   function onFileUpload(data) {
     console.log(data)
+    let info = data
+    localStorage.setItem("info", JSON.stringify(info));
   
     if (file === null) {
       console.log('Please upload a file')
@@ -94,7 +96,7 @@ export default function Home() {
       formData.append("file", file);
   
       // Append form data to formData
-      for (const key in data) {
+      for (const key in info) {
         formData.append(key, data[key]);
       }
 
@@ -119,7 +121,7 @@ export default function Home() {
           setisData(true)
           setIngredients(data.objects)
           console.log(data.objects)
-          localStorage.setItem("data", JSON.stringify(data));    
+          localStorage.setItem("data", JSON.stringify(data)); 
           router.push('/ingredients');      
       })
       .catch(error => {
